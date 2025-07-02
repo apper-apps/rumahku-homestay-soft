@@ -1,8 +1,16 @@
 import { toast } from 'react-toastify';
 
 export const propertyService = {
-  async getAll() {
+async getAll() {
     try {
+      // Check if ApperSDK is available
+      if (!window.ApperSDK || !window.ApperSDK.ApperClient) {
+        const errorMessage = 'ApperSDK is not loaded. Please ensure the SDK script is included.';
+        console.error(errorMessage);
+        toast.error(errorMessage);
+        return [];
+      }
+
       const { ApperClient } = window.ApperSDK;
       const apperClient = new ApperClient({
         apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
@@ -32,11 +40,18 @@ export const propertyService = {
         ]
       };
 
-const response = await apperClient.fetchRecords('property', params);
+      const response = await apperClient.fetchRecords('property', params);
 
-      if (!response || !response.success) {
-        const errorMessage = response?.message || 'Failed to fetch properties';
+      if (!response) {
+        const errorMessage = 'No response received from API';
         console.error(errorMessage);
+        toast.error(errorMessage);
+        return [];
+      }
+
+      if (!response.success) {
+        const errorMessage = response.message || 'Failed to fetch properties from API';
+        console.error('API Error:', errorMessage);
         toast.error(errorMessage);
         return [];
       }
