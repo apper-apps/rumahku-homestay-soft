@@ -16,13 +16,14 @@ const Home = () => {
     loadFeaturedProperties();
   }, []);
 
-  const loadFeaturedProperties = async () => {
+const loadFeaturedProperties = async () => {
     try {
       setLoading(true);
       const properties = await propertyService.getAll();
-      setFeaturedProperties(properties.slice(0, 6));
+      setFeaturedProperties((properties || []).slice(0, 6));
     } catch (error) {
       console.error('Error loading featured properties:', error);
+      setFeaturedProperties([]);
     } finally {
       setLoading(false);
     }

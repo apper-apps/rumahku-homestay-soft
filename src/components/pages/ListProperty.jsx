@@ -131,12 +131,21 @@ const ListProperty = () => {
 
     setLoading(true);
 
-    try {
+try {
       const propertyData = {
-        ...formData,
+        title: formData.title,
+        description: formData.description,
+        location: {
+          address: formData.location.address,
+          city: formData.location.city,
+          state: formData.location.state,
+          postcode: formData.location.postcode
+        },
         pricePerNight: parseFloat(formData.pricePerNight),
         maxGuests: parseInt(formData.maxGuests),
         photos: samplePhotos,
+        amenities: formData.amenities,
+        whatsappNumber: formData.whatsappNumber,
         status: 'active'
       };
 
@@ -148,6 +157,7 @@ const ListProperty = () => {
       navigate('/owner-dashboard');
       
     } catch (error) {
+      console.error('Property creation error:', error);
       toast.error('Failed to list property. Please try again.');
     } finally {
       setLoading(false);

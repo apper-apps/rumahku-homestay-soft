@@ -50,14 +50,16 @@ const Browse = () => {
     applyFilters();
   }, [properties, filters]);
 
-  const loadProperties = async () => {
+const loadProperties = async () => {
     try {
       setLoading(true);
       setError('');
       const data = await propertyService.getAll();
-      setProperties(data);
+      setProperties(data || []);
     } catch (err) {
+      console.error('Failed to load properties:', err);
       setError('Failed to load properties. Please try again.');
+      setProperties([]);
     } finally {
       setLoading(false);
     }
@@ -66,31 +68,36 @@ const Browse = () => {
   const applyFilters = () => {
     let filtered = [...properties];
 
-    // Location filter
+    // Location filter - handle potential undefined location objects
     if (filters.location) {
-      filtered = filtered.filter(property =>
-        property.location.city.toLowerCase().includes(filters.location.toLowerCase()) ||
-        property.location.state.toLowerCase().includes(filters.location.toLowerCase()) ||
-        property.title.toLowerCase().includes(filters.location.toLowerCase())
-      );
+      filtered = filtered.filter(property => {
+        const locationCity = property.location?.city || '';
+        const locationState = property.location?.state || '';
+        const title = property.title || '';
+        
+        return locationCity.toLowerCase().includes(filters.location.toLowerCase()) ||
+               locationState.toLowerCase().includes(filters.location.toLowerCase()) ||
+               title.toLowerCase().includes(filters.location.toLowerCase());
+      });
     }
 
     // Price filter
     filtered = filtered.filter(property =>
-      property.pricePerNight >= filters.priceRange.min &&
-      property.pricePerNight <= filters.priceRange.max
+      (property.pricePerNight || 0) >= filters.priceRange.min &&
+      (property.pricePerNight || 0) <= filters.priceRange.max
     );
 
     // Guests filter
-    filtered = filtered.filter(property => property.maxGuests >= filters.guests);
+    filtered = filtered.filter(property => (property.maxGuests || 1) >= filters.guests);
 
     // Amenities filter
     if (filters.amenities.length > 0) {
-      filtered = filtered.filter(property =>
-        filters.amenities.every(amenity =>
-          property.amenities.includes(amenity)
-        )
-      );
+      filtered = filtered.filter(property => {
+        const propertyAmenities = property.amenities || [];
+        return filters.amenities.every(amenity =>
+          propertyAmenities.includes(amenity)
+        );
+      });
     }
 
     setFilteredProperties(filtered);

@@ -54,7 +54,7 @@ const BookingWidget = ({ property }) => {
 
     setLoading(true);
 
-    try {
+try {
       const bookingData = {
         propertyId: property.Id,
         guestId: 'user-123', // Mock user ID
