@@ -1,0 +1,142 @@
+{
+  "properties": [
+    {
+      "Id": 1,
+      "title": "Traditional Malay House in Kampong Baru",
+      "description": "Experience authentic Malaysian culture in this beautifully restored traditional wooden house. Located in the heart of Kampong Baru, you'll be surrounded by local markets, street food, and rich heritage. The house features traditional architecture with modern amenities for your comfort.\n\nPerfect for families or groups wanting to experience genuine Malaysian hospitality. Our host family has been welcoming guests for over 5 years and loves sharing local knowledge and recommendations.\n\nWithin walking distance to KLCC, you can enjoy both traditional and modern Kuala Lumpur.",
+      "location": {
+        "address": "Jalan Raja Muda Abdul Aziz",
+        "city": "Kuala Lumpur",
+        "state": "Kuala Lumpur",
+        "postcode": "50300"
+      },
+      "pricePerNight": 180,
+      "maxGuests": 6,
+      "photos": [
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop"
+      ],
+      "amenities": ["WiFi", "Air Conditioning", "Kitchen", "TV", "Washing Machine", "Garden"],
+      "whatsappNumber": "123456789",
+      "status": "active"
+    },
+    {
+      "Id": 2,
+      "title": "Langkawi Beach Villa with Pool",
+      "description": "Stunning beachfront villa with private swimming pool and direct beach access. Wake up to breathtaking sunrise views over the Andaman Sea. This modern villa combines luxury with tropical charm, featuring spacious rooms and panoramic ocean views.\n\nThe villa includes a fully equipped kitchen, outdoor dining area, and a beautiful infinity pool. Perfect for romantic getaways or family vacations. Our property manager is always available to assist with island tours, restaurant recommendations, and activity bookings.\n\nLangkawi's duty-free shopping, cable car, and mangrove tours are all easily accessible.",
+      "location": {
+        "address": "Pantai Cenang",
+        "city": "Langkawi",
+        "state": "Kedah",
+        "postcode": "07000"
+      },
+      "pricePerNight": 450,
+      "maxGuests": 8,
+      "photos": [
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1502780402662-acc01917949e?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1574643156929-51fa098b0394?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop"
+      ],
+      "amenities": ["WiFi", "Air Conditioning", "Swimming Pool", "Kitchen", "Parking", "BBQ Area", "TV"],
+      "whatsappNumber": "123456790",
+      "status": "active"
+    },
+    {
+      "Id": 3,
+      "title": "Heritage Shophouse in George Town",
+      "description": "Stay in a beautifully restored 19th-century Peranakan shophouse in UNESCO World Heritage George Town. This unique property blends historical charm with modern comfort, featuring traditional tiles, wooden shutters, and antique furnishings.\n\nLocated on a quiet street in the heart of George Town, you're walking distance from famous street art, clan houses, temples, and the best Penang street food. The house has been lovingly maintained by the same family for three generations.\n\nEnjoy morning coffee in the courtyard, explore the vibrant streets by day, and return to your peaceful heritage home in the evening.",
+      "location": {
+        "address": "Lebuh Armenian",
+        "city": "George Town",
+        "state": "Penang",
+        "postcode": "10200"
+      },
+      "pricePerNight": 220,
+      "maxGuests": 4,
+      "photos": [
+        "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1493663284031-b7e3aaa4cab7?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop"
+      ],
+      "amenities": ["WiFi", "Air Conditioning", "Kitchen", "TV", "Garden", "Hot Water"],
+      "whatsappNumber": "123456791",
+      "status": "active"
+    },
+    {
+      "Id": 4,
+      "title": "Cameron Highlands Tea Estate Retreat",
+      "description": "Cozy cottage nestled among rolling tea plantations with stunning mountain views. Experience the cool highland climate and misty mornings in this peaceful retreat. The cottage features rustic charm with modern amenities and a fireplace for chilly evenings.\n\nPerfect for nature lovers and those seeking tranquility. Wake up to the sight of tea pickers working the slopes and enjoy fresh mountain air. The property includes a small garden where you can pick your own vegetables and herbs.\n\nNearby attractions include tea factory tours, strawberry farms, butterfly gardens, and scenic hiking trails through the Mossy Forest.",
+      "location": {
+        "address": "Brinchang Tea Estate",
+        "city": "Brinchang",
+        "state": "Pahang",
+        "postcode": "39000"
+      },
+      "pricePerNight": 160,
+      "maxGuests": 5,
+      "photos": [
+        "https://images.unsplash.com/photo-1578839503542-1e9ae5e86eb0?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1516375080664-3e4e94d2faa8?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop"
+      ],
+      "amenities": ["WiFi", "Kitchen", "Fireplace", "Garden", "Parking", "Hot Water"],
+      "whatsappNumber": "123456792",
+      "status": "active"
+    },
+    {
+      "Id": 5,
+      "title": "Modern Apartment in KLCC",
+      "description": "Luxurious modern apartment with spectacular city skyline views including the iconic Petronas Twin Towers. Located in the heart of Kuala Lumpur's Golden Triangle, this high-rise apartment offers urban sophistication with all premium amenities.\n\nThe apartment features floor-to-ceiling windows, contemporary furnishings, and a fully equipped kitchen. Building amenities include swimming pool, gym, and 24-hour security. You're within walking distance of Suria KLCC, parks, restaurants, and public transportation.\n\nPerfect for business travelers or those wanting to experience KL's vibrant city life with luxury and convenience.",
+      "location": {
+        "address": "Jalan Pinang",
+        "city": "Kuala Lumpur",
+        "state": "Kuala Lumpur",
+        "postcode": "50450"
+      },
+      "pricePerNight": 320,
+      "maxGuests": 4,
+      "photos": [
+        "https://images.unsplash.com/photo-1565182999561-18d7dc61c393?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1493663284031-b7e3aaa4cab7?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1560448075-bb485b067938?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&h=600&fit=crop"
+      ],
+      "amenities": ["WiFi", "Air Conditioning", "Swimming Pool", "Kitchen", "Parking", "TV", "Washing Machine"],
+      "whatsappNumber": "123456793",
+      "status": "active"
+    },
+    {
+      "Id": 6,
+      "title": "Riverside Chalet in Kuala Kubu Bharu",
+      "description": "Peaceful riverside chalet surrounded by lush rainforest and crystal-clear river. Perfect for nature enthusiasts and adventure seekers. The chalet offers rustic comfort with the soothing sounds of flowing water and chirping birds as your natural soundtrack.\n\nActivities include river swimming, jungle trekking, firefly watching, and white water rafting. The property features an outdoor deck overlooking the river, perfect for morning coffee or evening relaxation. Meals can be arranged with local ingredients and traditional cooking methods.\n\nA digital detox paradise where you can reconnect with nature and experience the tranquil side of Malaysia.",
+      "location": {
+        "address": "Sungai Chiling",
+        "city": "Kuala Kubu Bharu",
+        "state": "Selangor",
+        "postcode": "44000"
+      },
+      "pricePerNight": 140,
+      "maxGuests": 6,
+      "photos": [
+        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1516375080664-3e4e86eb0?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=600&fit=crop"
+      ],
+      "amenities": ["WiFi", "Kitchen", "BBQ Area", "Garden", "Parking", "Hot Water"],
+      "whatsappNumber": "123456794",
+      "status": "active"
+    }
+  ]
+}

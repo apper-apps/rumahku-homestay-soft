@@ -1,0 +1,100 @@
+{
+  "bookings": [
+    {
+      "Id": 1,
+      "propertyId": "1",
+      "guestId": "guest-001",
+      "checkIn": "2024-04-15",
+      "checkOut": "2024-04-18",
+      "guests": 4,
+      "totalAmount": 540,
+      "paymentStatus": "completed",
+      "bookingStatus": "confirmed",
+      "createdAt": "2024-03-20T10:00:00Z"
+    },
+    {
+      "Id": 2,
+      "propertyId": "2",
+      "guestId": "guest-002",
+      "checkIn": "2024-04-22",
+      "checkOut": "2024-04-25",
+      "guests": 6,
+      "totalAmount": 1350,
+      "paymentStatus": "completed",
+      "bookingStatus": "confirmed",
+      "createdAt": "2024-03-25T14:30:00Z"
+    },
+    {
+      "Id": 3,
+      "propertyId": "3",
+      "guestId": "guest-003",
+      "checkIn": "2024-05-01",
+      "checkOut": "2024-05-04",
+      "guests": 2,
+      "totalAmount": 660,
+      "paymentStatus": "pending",
+      "bookingStatus": "pending",
+      "createdAt": "2024-04-01T09:15:00Z"
+    },
+    {
+      "Id": 4,
+      "propertyId": "4",
+      "guestId": "guest-004",
+      "checkIn": "2024-05-10",
+      "checkOut": "2024-05-13",
+      "guests": 3,
+      "totalAmount": 480,
+      "paymentStatus": "completed",
+      "bookingStatus": "confirmed",
+      "createdAt": "2024-04-05T16:45:00Z"
+    },
+    {
+      "Id": 5,
+      "propertyId": "5",
+      "guestId": "guest-005",
+      "checkIn": "2024-03-10",
+      "checkOut": "2024-03-13",
+      "guests": 2,
+      "totalAmount": 960,
+      "paymentStatus": "completed",
+      "bookingStatus": "completed",
+      "createdAt": "2024-02-15T11:20:00Z"
+    },
+    {
+      "Id": 6,
+      "propertyId": "6",
+      "guestId": "guest-006",
+      "checkIn": "2024-05-20",
+      "checkOut": "2024-05-23",
+      "guests": 4,
+      "totalAmount": 420,
+      "paymentStatus": "completed",
+      "bookingStatus": "confirmed",
+      "createdAt": "2024-04-10T13:00:00Z"
+    },
+    {
+      "Id": 7,
+      "propertyId": "1",
+      "guestId": "guest-007",
+      "checkIn": "2024-03-01",
+      "checkOut": "2024-03-05",
+      "guests": 5,
+      "totalAmount": 720,
+      "paymentStatus": "completed",
+      "bookingStatus": "completed",
+      "createdAt": "2024-02-10T08:30:00Z"
+    },
+    {
+      "Id": 8,
+      "propertyId": "2",
+      "guestId": "guest-008",
+      "checkIn": "2024-04-08",
+      "checkOut": "2024-04-10",
+      "guests": 4,
+      "totalAmount": 900,
+      "paymentStatus": "refunded",
+      "bookingStatus": "cancelled",
+      "createdAt": "2024-03-15T15:20:00Z"
+    }
+  ]
+}
