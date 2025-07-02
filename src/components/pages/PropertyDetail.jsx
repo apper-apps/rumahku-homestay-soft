@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import ApperIcon from '@/components/ApperIcon';
-import Button from '@/components/atoms/Button';
-import Badge from '@/components/atoms/Badge';
-import BookingWidget from '@/components/organisms/BookingWidget';
-import Loading from '@/components/ui/Loading';
-import Error from '@/components/ui/Error';
-import { propertyService } from '@/services/api/propertyService';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Browse from "@/components/pages/Browse";
+import BookingWidget from "@/components/organisms/BookingWidget";
+import Badge from "@/components/atoms/Badge";
+import Button from "@/components/atoms/Button";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import { propertyService } from "@/services/api/propertyService";
 
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+const [error, setError] = useState('');
+  const [imageErrors, setImageErrors] = useState(new Set());
+  const [imagesLoading, setImagesLoading] = useState(new Set());
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   useEffect(() => {
@@ -26,31 +30,64 @@ const PropertyDetail = () => {
     try {
       setLoading(true);
       setError('');
-      const data = await propertyService.getById(parseInt(id));
+      const data = await propertyService.getById(id);
+      
+      // Validate property data
+      if (!data) {
+        throw new Error('Data properti tidak ditemukan');
+      }
+      
+      // Ensure photos array exists
+      if (!data.photos || !Array.isArray(data.photos)) {
+        data.photos = [];
+      }
+      
       setProperty(data);
+      
+      // Initialize image loading states
+      const loadingSet = new Set();
+      data.photos.forEach((_, index) => {
+        loadingSet.add(index);
+      });
+      setImagesLoading(loadingSet);
+      
     } catch (err) {
-      setError('Property not found');
+      console.error('Property loading error:', err);
+      setError(err.message || 'Gagal memuat detail properti');
     } finally {
       setLoading(false);
     }
+};
+
+  const handleImageError = (index) => {
+    setImageErrors(prev => new Set([...prev, index]));
+    setImagesLoading(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
+  };
+
+  const handleImageLoad = (index) => {
+    setImagesLoading(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
   };
 
   const handleWhatsApp = () => {
-    if (!property) return;
-    
-    const message = `Hi! I'm interested in your homestay: ${property.title}. I'd like to know more about availability and booking details.`;
-    const whatsappUrl = `https://wa.me/60${property.whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const message = `Halo, saya tertarik dengan properti ${property?.title || 'ini'} di ${property?.location || 'lokasi ini'}. Bisakah saya mendapat informasi lebih lanjut?`;
+    const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-    
-    toast.success('Opening WhatsApp...');
   };
 
-  const handleShare = () => {
+const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: property.title,
-        text: property.description,
-        url: window.location.href,
+        title: property?.title || 'Properti',
+        text: `Lihat properti ${property?.title || 'ini'} di ${property?.location || 'lokasi ini'}`,
+        url: window.location.href
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
@@ -134,45 +171,107 @@ const PropertyDetail = () => {
               >
                 Share
               </Button>
-              <Button
+<Button
                 variant="secondary"
                 icon="MessageCircle"
                 onClick={handleWhatsApp}
               >
-                WhatsApp Host
+                WhatsApp
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Photo Gallery */}
-        <div className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 rounded-xl overflow-hidden">
-            <div className="md:col-span-2">
-              <img
-                src={property.photos[selectedImageIndex]}
-                alt={property.title}
-                className="w-full h-64 md:h-96 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-200"
-                onClick={() => setShowAllPhotos(true)}
-              />
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
-              {property.photos.slice(1, 5).map((photo, index) => (
-                <img
-                  key={index}
-                  src={photo}
-                  alt={`${property.title} ${index + 2}`}
-                  className="w-full h-32 md:h-[11.5rem] object-cover cursor-pointer hover:opacity-90 transition-opacity duration-200"
-                  onClick={() => {
-                    setSelectedImageIndex(index + 1);
-                    setShowAllPhotos(true);
-                  }}
-                />
-              ))}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+              <div className="relative">
+                {/* Main Image */}
+                {property?.photos && property.photos.length > 0 ? (
+                  <>
+                    {imagesLoading.has(0) && !imageErrors.has(0) && (
+                      <div className="w-full h-96 bg-gray-200 animate-pulse flex items-center justify-center">
+                        <ApperIcon name="ImageIcon" size={48} className="text-gray-400" />
+                      </div>
+                    )}
+                    
+                    {imageErrors.has(0) ? (
+                      <div className="w-full h-96 bg-gray-100 flex flex-col items-center justify-center text-gray-500">
+                        <ApperIcon name="ImageOff" size={48} className="mb-4" />
+                        <span className="text-lg mb-2">Gambar tidak dapat dimuat</span>
+                        <span className="text-sm">Coba muat ulang halaman</span>
+                      </div>
+                    ) : (
+                      <img
+                        src={property.photos[0]}
+                        alt={property?.title || 'Property'}
+                        className={`w-full h-96 object-cover cursor-pointer transition-opacity ${
+                          imagesLoading.has(0) ? 'opacity-0' : 'opacity-100'
+                        }`}
+                        onClick={() => {
+                          setSelectedImageIndex(0);
+                          setShowImageModal(true);
+                        }}
+                        onError={() => handleImageError(0)}
+                        onLoad={() => handleImageLoad(0)}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="w-full h-96 bg-gray-100 flex flex-col items-center justify-center text-gray-500">
+                    <ApperIcon name="ImageIcon" size={48} className="mb-4" />
+                    <span className="text-lg">Tidak ada gambar tersedia</span>
+                  </div>
+                )}
+                
+                <div className="absolute top-4 left-4">
+                  <Badge variant={property?.status === 'available' ? 'success' : 'warning'}>
+                    {property?.status === 'available' ? 'Tersedia' : 'Tidak Tersedia'}
+                  </Badge>
+                </div>
+              </div>
+              
+              {/* Thumbnail Images */}
+              {property?.photos && property.photos.length > 1 && (
+                <div className="grid grid-cols-4 gap-2 p-4">
+                  {property.photos.slice(1, 5).map((photo, index) => {
+                    const imageIndex = index + 1;
+                    return (
+                      <div key={index} className="relative">
+                        {imagesLoading.has(imageIndex) && !imageErrors.has(imageIndex) && (
+                          <div className="w-full h-24 bg-gray-200 animate-pulse flex items-center justify-center">
+                            <ApperIcon name="ImageIcon" size={16} className="text-gray-400" />
+                          </div>
+                        )}
+                        
+                        {imageErrors.has(imageIndex) ? (
+                          <div className="w-full h-24 bg-gray-100 flex items-center justify-center">
+                            <ApperIcon name="ImageOff" size={16} className="text-gray-400" />
+                          </div>
+                        ) : (
+                          <img
+                            src={photo}
+                            alt={`${property?.title || 'Property'} ${index + 2}`}
+                            className={`w-full h-24 object-cover cursor-pointer hover:opacity-80 transition-opacity ${
+                              imagesLoading.has(imageIndex) ? 'opacity-0' : 'opacity-100'
+                            }`}
+                            onClick={() => {
+                              setSelectedImageIndex(imageIndex);
+                              setShowImageModal(true);
+                            }}
+                            onError={() => handleImageError(imageIndex)}
+                            onLoad={() => handleImageLoad(imageIndex)}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
           
-          {property.photos.length > 5 && (
+          {property?.photos && property.photos.length > 5 && (
             <div className="text-center mt-4">
               <Button
                 variant="outline"
@@ -328,7 +427,7 @@ const PropertyDetail = () => {
         </div>
       </div>
 
-      {/* Photo Modal */}
+{/* Photo Modal */}
       {showAllPhotos && (
         <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="max-w-4xl w-full">
@@ -344,45 +443,83 @@ const PropertyDetail = () => {
               </button>
             </div>
             
-            <div className="relative">
-              <img
-                src={property.photos[selectedImageIndex]}
-                alt={`${property.title} ${selectedImageIndex + 1}`}
-                className="w-full h-96 object-cover rounded-lg"
-              />
-              
-              {selectedImageIndex > 0 && (
-                <button
-                  onClick={() => setSelectedImageIndex(selectedImageIndex - 1)}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
-                >
-                  <ApperIcon name="ChevronLeft" size={24} />
-                </button>
-              )}
-              
-              {selectedImageIndex < property.photos.length - 1 && (
-                <button
-                  onClick={() => setSelectedImageIndex(selectedImageIndex + 1)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
-                >
-                  <ApperIcon name="ChevronRight" size={24} />
-                </button>
-              )}
+            <div className="flex items-center justify-center">
+              <div className="relative max-w-4xl max-h-[80vh]">
+                {property?.photos && property.photos[selectedImageIndex] ? (
+                  <>
+                    {imageErrors.has(selectedImageIndex) ? (
+                      <div className="w-full h-96 bg-gray-100 flex flex-col items-center justify-center text-white">
+                        <ApperIcon name="ImageOff" size={48} className="mb-4" />
+                        <span className="text-lg mb-2">Gambar tidak dapat dimuat</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const newErrors = new Set(imageErrors);
+                            newErrors.delete(selectedImageIndex);
+                            setImageErrors(newErrors);
+                            // Force reload by adding timestamp
+                            const img = new Image();
+                            img.src = property.photos[selectedImageIndex] + '?t=' + Date.now();
+                          }}
+                          className="text-white border-white hover:bg-white hover:text-gray-900"
+                        >
+                          Coba Lagi
+                        </Button>
+                      </div>
+                    ) : (
+                      <img
+                        src={property.photos[selectedImageIndex]}
+                        alt={`${property?.title || 'Property'} ${selectedImageIndex + 1}`}
+                        className="max-w-full max-h-full object-contain"
+                        onError={() => handleImageError(selectedImageIndex)}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="w-full h-96 bg-gray-100 flex items-center justify-center text-white">
+                    <ApperIcon name="ImageIcon" size={48} />
+                  </div>
+                )}
+                
+                {property?.photos && property.photos.length > 1 && (
+                  <>
+                    <button
+                      disabled={selectedImageIndex === 0}
+                      onClick={() => setSelectedImageIndex(selectedImageIndex - 1)}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <ApperIcon name="ChevronLeft" size={24} />
+                    </button>
+                    <button
+                      disabled={selectedImageIndex === (property.photos.length - 1)}
+                      onClick={() => setSelectedImageIndex(selectedImageIndex + 1)}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <ApperIcon name="ChevronRight" size={24} />
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
             
-            <div className="flex gap-2 mt-4 overflow-x-auto">
-              {property.photos.map((photo, index) => (
-                <img
-                  key={index}
-                  src={photo}
-                  alt={`Thumbnail ${index + 1}`}
-                  className={`w-16 h-16 object-cover rounded cursor-pointer ${
-                    index === selectedImageIndex ? 'ring-2 ring-white' : 'opacity-60 hover:opacity-80'
-                  }`}
-                  onClick={() => setSelectedImageIndex(index)}
-                />
-              ))}
-            </div>
+            {property?.photos && property.photos.length > 0 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                <div className="flex space-x-2">
+                  {property.photos.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                        index === selectedImageIndex
+                          ? 'bg-white'
+                          : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

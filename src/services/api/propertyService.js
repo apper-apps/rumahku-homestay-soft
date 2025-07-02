@@ -4,18 +4,42 @@ import { properties } from '@/services/mockData/properties.json';
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const propertyService = {
-  async getAll() {
+async getAll() {
     await delay(300);
-    return [...properties];
+    
+    // Validate and sanitize all properties
+    const sanitizedProperties = properties.map(property => ({
+      ...property,
+      photos: Array.isArray(property.photos) ? property.photos : [],
+      title: property.title || 'Property Title Not Available',
+      location: property.location || 'Location Not Available',
+      price: typeof property.price === 'number' ? property.price : 0,
+      rating: typeof property.rating === 'number' ? property.rating : 0,
+      status: property.status || 'unavailable'
+    }));
+    
+    return sanitizedProperties;
   },
 
-  async getById(id) {
+async getById(id) {
     await delay(250);
     const property = properties.find(p => p.Id === id);
     if (!property) {
       throw new Error('Property not found');
     }
-    return { ...property };
+    
+    // Validate and sanitize property data
+    const sanitizedProperty = {
+      ...property,
+      photos: Array.isArray(property.photos) ? property.photos : [],
+      title: property.title || 'Property Title Not Available',
+      location: property.location || 'Location Not Available',
+      price: typeof property.price === 'number' ? property.price : 0,
+      rating: typeof property.rating === 'number' ? property.rating : 0,
+      status: property.status || 'unavailable'
+    };
+    
+    return sanitizedProperty;
   },
 
   async create(propertyData) {
