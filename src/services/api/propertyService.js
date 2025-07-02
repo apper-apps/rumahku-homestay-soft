@@ -32,14 +32,14 @@ export const propertyService = {
         ]
       };
 
-      const response = await apperClient.fetchRecords('property', params);
+const response = await apperClient.fetchRecords('property', params);
 
-      if (!response.success) {
-        console.error(response.message);
-        toast.error(response.message);
+      if (!response || !response.success) {
+        const errorMessage = response?.message || 'Failed to fetch properties';
+        console.error(errorMessage);
+        toast.error(errorMessage);
         return [];
       }
-
       // Transform database fields to frontend format
       const properties = response.data.map(property => ({
         Id: property.Id,
@@ -94,12 +94,12 @@ export const propertyService = {
         ]
       };
 
-      const response = await apperClient.getRecordById('property', parseInt(id), params);
+const response = await apperClient.getRecordById('property', parseInt(id), params);
 
-      if (!response || !response.data) {
-        throw new Error('Property not found');
+      if (!response || !response.success || !response.data) {
+        const errorMessage = response?.message || 'Property not found';
+        throw new Error(errorMessage);
       }
-
       const property = response.data;
       
       // Transform database fields to frontend format
@@ -155,14 +155,14 @@ export const propertyService = {
         records: [dbData]
       };
 
-      const response = await apperClient.createRecord('property', params);
+const response = await apperClient.createRecord('property', params);
 
-      if (!response.success) {
-        console.error(response.message);
-        toast.error(response.message);
-        throw new Error(response.message);
+      if (!response || !response.success) {
+        const errorMessage = response?.message || 'Failed to create property';
+        console.error(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
-
       if (response.results) {
         const successfulRecords = response.results.filter(result => result.success);
         const failedRecords = response.results.filter(result => !result.success);
@@ -219,14 +219,14 @@ export const propertyService = {
         records: [dbData]
       };
 
-      const response = await apperClient.updateRecord('property', params);
+const response = await apperClient.updateRecord('property', params);
 
-      if (!response.success) {
-        console.error(response.message);
-        toast.error(response.message);
-        throw new Error(response.message);
+      if (!response || !response.success) {
+        const errorMessage = response?.message || 'Failed to update property';
+        console.error(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
-
       if (response.results) {
         const successfulUpdates = response.results.filter(result => result.success);
         const failedUpdates = response.results.filter(result => !result.success);
@@ -266,14 +266,14 @@ export const propertyService = {
         RecordIds: [parseInt(id)]
       };
 
-      const response = await apperClient.deleteRecord('property', params);
+const response = await apperClient.deleteRecord('property', params);
 
-      if (!response.success) {
-        console.error(response.message);
-        toast.error(response.message);
-        throw new Error(response.message);
+      if (!response || !response.success) {
+        const errorMessage = response?.message || 'Failed to delete property';
+        console.error(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
-
       if (response.results) {
         const successfulDeletions = response.results.filter(result => result.success);
         const failedDeletions = response.results.filter(result => !result.success);
