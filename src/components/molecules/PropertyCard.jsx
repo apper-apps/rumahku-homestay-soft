@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ApperIcon from '@/components/ApperIcon';
 import Badge from '@/components/atoms/Badge';
 
@@ -31,8 +32,83 @@ const handleWhatsApp = (e) => {
     const message = `Halo, saya tertarik dengan properti ${property?.title || 'ini'} di ${property?.location || 'lokasi ini'}. Bisakah saya mendapat informasi lebih lanjut?`;
     const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+};
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    
+    const shareData = {
+      title: property.title || property.Name,
+      text: `Check out this amazing homestay: ${property.title || property.Name}`,
+      url: `${window.location.origin}/property/${property.Id}`
+    };
+
+    try {
+      // Check if Navigator.share is supported and available
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        toast.success('Property shared successfully!');
+      } else if (navigator.share) {
+        // Fallback for browsers that support share but not canShare
+        await navigator.share(shareData);
+        toast.success('Property shared successfully!');
+      } else {
+        // Fallback to clipboard copy
+        await handleClipboardFallback(shareData);
+      }
+    } catch (error) {
+      console.error('Share failed:', error);
+      
+      if (error.name === 'AbortError') {
+        // User cancelled the share - don't show error
+        return;
+      } else if (error.name === 'NotAllowedError') {
+        // Permission denied - try clipboard fallback
+        await handleClipboardFallback(shareData);
+      } else {
+        // Other errors - try clipboard fallback
+        await handleClipboardFallback(shareData);
+      }
+    }
   };
 
+  const handleClipboardFallback = async (shareData) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(shareData.url);
+        toast.success('Property link copied to clipboard!');
+      } else {
+        // Fallback for browsers without clipboard API
+        handleManualCopyFallback(shareData.url);
+      }
+    } catch (clipboardError) {
+      console.error('Clipboard copy failed:', clipboardError);
+      handleManualCopyFallback(shareData.url);
+    }
+  };
+
+  const handleManualCopyFallback = (url) => {
+    try {
+      // Create a temporary input element for manual copy
+      const tempInput = document.createElement('input');
+      tempInput.value = url;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      tempInput.setSelectionRange(0, 99999); // For mobile devices
+      
+      const successful = document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      
+      if (successful) {
+        toast.success('Property link copied to clipboard!');
+      } else {
+        toast.info(`Copy this link to share: ${url}`);
+      }
+    } catch (error) {
+      console.error('Manual copy failed:', error);
+      toast.info(`Copy this link to share: ${url}`);
+    }
+  };
   // Get primary image with fallback
   const primaryImage = property?.photos?.[0] || '/placeholder-property.jpg';
 
@@ -72,7 +148,14 @@ const handleWhatsApp = (e) => {
             {property?.status === 'active' ? 'Tersedia' : 'Tidak Tersedia'}
           </Badge>
         </div>
-        <div className="absolute top-4 right-4">
+<div className="absolute top-4 right-4 flex gap-2">
+          <button
+            onClick={handleShare}
+            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full transition-colors duration-200"
+            title="Share Property"
+          >
+            <ApperIcon name="Share2" size={16} />
+          </button>
           <button
             onClick={handleWhatsApp}
             className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition-colors duration-200"
@@ -80,7 +163,7 @@ const handleWhatsApp = (e) => {
           >
             <ApperIcon name="MessageCircle" size={16} />
           </button>
-</div>
+        </div>
       </div>
 
       <div className="p-6">
